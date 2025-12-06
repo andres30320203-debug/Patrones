@@ -88,3 +88,117 @@ class Latte extends Cafe {
         System.out.println("Agregando mas leche que espuma");
     }
 }
+
+abstract class DecoradorCafe extends Cafe {
+    protected Cafe cafe;
+
+    public DecoradorCafe(Cafe cafe) {
+        this.cafe = cafe;
+    }
+
+    @Override
+    public String getDescripcion() {
+        return cafe.getDescripcion();
+    }
+
+    @Override
+    public double getPrecio() {
+        return cafe.getPrecio();
+    }
+
+    @Override
+    public void preparar() {
+        cafe.preparar();
+    }
+}
+
+class Leche extends DecoradorCafe {
+    public Leche(Cafe cafe) {
+        super(cafe);
+    }
+
+    @Override
+    public String getDescripcion() {
+        return cafe.getDescripcion() + " con Leche";
+    }
+
+    @Override
+    public double getPrecio() {
+        return cafe.getPrecio() + 0.50;
+    }
+
+    @Override
+    public void preparar() {
+        cafe.preparar();
+        System.out.println("Agregando leche caliente");
+    }
+}
+
+class Azucar extends DecoradorCafe {
+    private int cucharadas;
+
+    public Azucar(Cafe cafe, int cucharadas) {
+        super(cafe);
+        this.cucharadas = cucharadas;
+    }
+
+    @Override
+    public String getDescripcion() {
+        return cafe.getDescripcion() + " con " + cucharadas + " cucharadas de Azucar";
+    }
+
+    @Override
+    public double getPrecio() {
+        return cafe.getPrecio() + (0.10 * cucharadas);
+    }
+
+    @Override
+    public void preparar() {
+        cafe.preparar();
+        System.out.println("Agregando " + cucharadas + " cucharadas de Azucar");
+    }
+}
+
+class Crema extends DecoradorCafe {
+    public Crema(Cafe cafe) {
+        super(cafe);
+    }
+
+    @Override
+    public String getDescripcion() {
+        return cafe.getDescripcion() + " con Crema Batida";
+    }
+
+    @Override
+    public double getPrecio() {
+        return cafe.getPrecio() + 0.70;
+    }
+
+    @Override
+    public void preparar() {
+        super.preparar();
+        System.out.println("Agregando crema batida por encima");
+    }
+}
+
+class Canela extends DecoradorCafe {
+    public Canela(Cafe cafe) {
+        super(cafe);
+    }
+
+    @Override
+    public String getDescripcion() {
+        return cafe.getDescripcion() + " con Canela";
+    }
+
+    @Override
+    public double getPrecio() {
+        return cafe.getPrecio() + 0.30;
+    }
+
+    @Override
+    public void preparar() {
+        super.preparar();
+        System.out.println("Espolvoreando canela por encima");
+    }
+}
