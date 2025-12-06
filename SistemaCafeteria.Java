@@ -268,3 +268,53 @@ class SistemaDeInventario implements ObservadorCafe {
         }
     }
 }
+
+public class SistemaCafeteria {
+    public static void main(String[] args) {
+        System.out.println("=== SISTEMA DE CAFETERIA ===\n");
+
+        Barista barista = new Barista("Andres");
+
+        barista.agregarObservador(new Cliente("Sophia"));
+        barista.agregarObservador(new SistemaDeFacturacion());
+        barista.agregarObservador(new SistemaDeInventario());
+
+        // EJEMPLO 1: Expresso Simple
+        System.out.println("--- PEDIDO 1: Expresso Simple ---"),
+        FabricaCafe fabricaExpresso = new FabricaExpresso();
+        List<DecoradorCafe> sinDecoradores = new ArrayList<>();
+        
+        Cafe pedido1 = barista.prepararPedido(fabricaExpresso, sinDecoradores);
+        pedido1.preparar();
+        System.out.println("Descripcion:" + pedido1.getDescripcion());
+        System.out.println("Precio: $" + pedido1.getPrecio());
+
+        // EJEMPLO 2: Latte con varias decoraciones
+        System.out.println("\n--- PEDIDO 2: Latte con Leche, Azucar ---");
+        FabricaCafe fabricaLatte = new FabricaLatte();
+        List<DecoradorCafe> decoradoresLatte = new ArrayList<>();
+
+        Cafe latteBase = fabricaLatte.crearCafe();
+        decoradoresLatte.add(new Leche(latteBase));
+        decoradoresLatte.add(new Azucar(decoradoresLatte.get(0), 2));
+        decoradoresLatte.add(new Crema(decoradoresLatte.get(1)));
+
+        Cafe pedido2 = barista.prepararPedido(fabricaLatte, decoradoresLatte);
+        pedido2.preparar();
+        System.out.println("Descripcion:" + pedido2.getDescripcion());
+        System.out.println("Precio: $" + pedido2.getPrecio());
+
+        // EJEMPLO 3: Capuchino con Canela
+        System.out.println("\n--- PEDIDO 3: Capuchino Personalizado ---");
+        FabricaCafe fabricaCapuchino = new FabricaCapuchino();
+        List<DecoradorCafe> decoradoresCapuchino = new ArrayList<>();
+
+        Cafe capuchinoBase = fabricaCapuchino.crearCafe();
+        decoradoresCapuchino.add(new Leche(capuchinoBase));
+        decoradoresCapuchino.add(new Canela(decoradoresCapuchino.get(0)));
+        Cafe pedido3 = barista.prepararPedido(fabricarCapuchino, decoradoresCapuchino);
+        pedido3.preparar();
+        System.out.println("Descripcion:" + pedido3.getDescripcion());
+        System.out.println("Precio: $" + pedido3.getPrecio());
+    }
+}
