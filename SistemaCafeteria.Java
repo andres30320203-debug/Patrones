@@ -38,7 +38,7 @@ class FabricaCapuchino implements FabricaCafe {
     }
 }
 
-class FabricarLatte implements FabricaCafe {
+class FabricaLatte implements FabricaCafe {
     @Override
     public Cafe crearCafe() {
         return new Latte();
@@ -223,7 +223,7 @@ class Barista {
     }
 
     public Cafe prepararPedido(FabricaCafe fabrica, List<DecoradorCafe> decoradores) {
-        notificarATodos("Iniiciando preparacion de cafe");
+        notificarATodos("Iniciando preparacion de cafe");
 
         // Aqui creamos el cafe base usando Fabrica (Factory)
         Cafe cafe = fabrica.crearCafe();
@@ -238,7 +238,7 @@ class Barista {
     }
 }
 
-class Cliente implements OservadorCafe {
+class Cliente implements ObservadorCafe {
     private String nombre;
 
     public Cliente(String nombre) {
@@ -255,7 +255,7 @@ class SistemaDeFacturacion implements ObservadorCafe {
     @Override
     public void notificar (String mensaje) {
         if (mensaje.contains("Precio")) {
-            System.out.println("[SISTEMA FATURACION] Registrando venta...");
+            System.out.println("[SISTEMA FACTURACION] Registrando venta...");
         }
     }
 }
@@ -263,7 +263,8 @@ class SistemaDeFacturacion implements ObservadorCafe {
 class SistemaDeInventario implements ObservadorCafe {
     @Override
     public void notificar(String mensaje) {
-        if (mensaje.contains("preparando")) {
+        String m = mensaje.toLowerCase();
+        if (m.contains("iniciando") || m.contains("preparacion") || m.contains("preparando")) {
             System.out.println("[SISTEMA INVENTARIO] Actualizando stock...");
         }
     }
@@ -280,7 +281,7 @@ public class SistemaCafeteria {
         barista.agregarObservador(new SistemaDeInventario());
 
         // EJEMPLO 1: Expresso Simple
-        System.out.println("--- PEDIDO 1: Expresso Simple ---"),
+        System.out.println("--- PEDIDO 1: Expresso Simple ---");
         FabricaCafe fabricaExpresso = new FabricaExpresso();
         List<DecoradorCafe> sinDecoradores = new ArrayList<>();
         
@@ -312,7 +313,7 @@ public class SistemaCafeteria {
         Cafe capuchinoBase = fabricaCapuchino.crearCafe();
         decoradoresCapuchino.add(new Leche(capuchinoBase));
         decoradoresCapuchino.add(new Canela(decoradoresCapuchino.get(0)));
-        Cafe pedido3 = barista.prepararPedido(fabricarCapuchino, decoradoresCapuchino);
+        Cafe pedido3 = barista.prepararPedido(fabricaCapuchino, decoradoresCapuchino);
         pedido3.preparar();
         System.out.println("Descripcion:" + pedido3.getDescripcion());
         System.out.println("Precio: $" + pedido3.getPrecio());
