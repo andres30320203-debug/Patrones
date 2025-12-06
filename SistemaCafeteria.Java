@@ -202,3 +202,69 @@ class Canela extends DecoradorCafe {
         System.out.println("Espolvoreando canela por encima");
     }
 }
+
+class Barista {
+    private List<ObservadorCafe> observadores;
+    private String nombre;
+
+    public Barista(String nombre) {
+        this.nombre = nombre;
+        this.observadores = new ArrayList<>();
+    }
+
+    public void agregarObservador(ObservadorCafe observador) {
+        observadores.add(observador);
+    }
+
+    public void notificarATodos(String mensaje) {
+        for (ObservadorCafe observador : observadores) {
+            observador.notificar("Barista " + nombre + ":" + mensaje);
+        }
+    }
+
+    public Cafe prepararPedido(FabricaCafe fabrica, List<DecoradorCafe> decoradores) {
+        notificarATodos("Iniiciando preparacion de cafe");
+
+        // Aqui creamos el cafe base usando Fabrica (Factory)
+        Cafe cafe = fabrica.crearCafe();
+
+        // Aplicamos los decoradores (Decorator)
+        for (DecoradorCafe decorador : decoradores) {
+            cafe = decorador;
+        }
+
+        notificarATodos("Cafe preparado:" + cafe.getDescripcion() + " Precio: $" + cafe.getPrecio());
+        return cafe;
+    }
+}
+
+class Cliente implements OservadorCafe {
+    private String nombre;
+
+    public Cliente(String nombre) {
+        this.nombre = nombre;
+    }
+
+    @Override
+    public void notificar(String mensaje) {
+        System.out.println("Cliente " + nombre + " recibe: " + mensaje);
+    }
+}
+
+class SistemaDeFacturacion implements ObservadorCafe {
+    @Override
+    public void notificar (String mensaje) {
+        if (mensaje.contains("Precio")) {
+            System.out.println("[SISTEMA FATURACION] Registrando venta...");
+        }
+    }
+}
+
+class SistemaDeInventario implements ObservadorCafe {
+    @Override
+    public void notificar(String mensaje) {
+        if (mensaje.contains("preparando")) {
+            System.out.println("[SISTEMA INVENTARIO] Actualizando stock...");
+        }
+    }
+}
